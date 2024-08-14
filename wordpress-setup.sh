@@ -71,7 +71,7 @@ NEW_LOGGED_IN_SALT=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w16 | head -n1)
 NEW_NONCE_SALT=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w16 | head -n1)
 
 # Backup original file before editing
-cp "$FILE" "${FILE}.bak"
+sudo -u www-data cp "$FILE" "${FILE}.bak"
 
 # Edit the file by deleting old keys and adding new ones
 sed -i '/define\( 'AUTH_KEY',/d' "$FILE"
