@@ -73,22 +73,23 @@ NEW_NONCE_SALT=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w16 | head -n1)
 # Backup original file before editing
 sudo -u www-data cp "$FILE" "${FILE}.bak"
 
-# Edit the file by deleting old keys and adding new ones
-sed -i '/define\( 'AUTH_KEY',/d' "$FILE"
-echo "define( 'AUTH_KEY',         '$NEW_AUTH_KEY');" >> "$FILE"
-sed -i '/define\( 'SECURE_AUTH_KEY',/d' "$FILE"
-echo "define( 'SECURE_AUTH_KEY',  '$NEW_SECURE_AUTH_KEY');" >> "$FILE"
-sed -i '/define\( 'LOGGED_IN_KEY',/d' "$FILE"
-echo "define( 'LOGGED_IN_KEY',    '$NEW_LOGGED_IN_KEY');" >> "$FILE"
-sed -i '/define\( 'NONCE_KEY',/d' "$FILE"
-echo "define( 'NONCE_KEY',        '$NEW_NONCE_KEY');" >> "$FILE"
-sed -i '/define\( 'AUTH_SALT',/d' "$FILE"
-echo "define( 'AUTH_SALT',        '$NEW_AUTH_SALT');" >> "$FILE"
-sed -i '/define\( 'SECURE_AUTH_SALT',/d' "$FILE"
-echo "define( 'SECURE_AUTH_SALT', '$NEW_SECURE_AUTH_SALT');" >> "$FILE"
-sed -i '/define\( 'LOGGED_IN_SALT',/d' "$FILE"
-echo "define( 'LOGGED_IN_SALT',   '$NEW_LOGGED_IN_SALT');" >> "$FILE"
-sed -i '/define\( 'NONCE_SALT',/d' "$FILE"
-echo "define( 'NONCE_SALT',       '$NEW_NONCE_SALT');" >> "$FILE"
+# Delete old keys and add new ones
+sudo -u www-data sed -i '/AUTH_KEY/d' "$FILE"
+sudo -u www-data sed -i '/SECURE_AUTH_KEY/d' "$FILE"
+sudo -u www-data sed -i '/LOGGED_IN_KEY/d' "$FILE"
+sudo -u www-data sed -i '/NONCE_KEY/d' "$FILE"
+sudo -u www-data sed -i '/AUTH_SALT/d' "$FILE"
+sudo -u www-data sed -i '/SECURE_AUTH_SALT/d' "$FILE"
+sudo -u www-data sed -i '/LOGGED_IN_SALT/d' "$FILE"
+sudo -u www-data sed -i '/NONCE_SALT/d' "$FILE"
 
-
+cat <<EOF | sudo -u www-data tee -a "$FILE"
+define( 'AUTH_KEY',         '$NEW_AUTH_KEY');
+define( 'SECURE_AUTH_KEY',  '$NEW_SECURE_AUTH_KEY');
+define( 'LOGGED_IN_KEY',    '$NEW_LOGGED_IN_KEY');
+define( 'NONCE_KEY',        '$NEW_NONCE_KEY');
+define( 'AUTH_SALT',        '$NEW_AUTH_SALT');
+define( 'SECURE_AUTH_SALT', '$NEW_SECURE_AUTH_SALT');
+define( 'LOGGED_IN_SALT',   '$NEW_LOGGED_IN_SALT');
+define( 'NONCE_SALT',       '$NEW_NONCE_SALT');
+EOF
