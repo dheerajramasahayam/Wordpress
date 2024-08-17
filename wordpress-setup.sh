@@ -29,7 +29,14 @@ sudo chown www-data: /srv/www
 
 curl https://wordpress.org/latest.tar.gz | sudo -u www-data tar zx -C /srv/www
 
-sudo cp wordpress.conf /etc/apache2/sites-available/
+# Making sure the file is copied to the correct location
+
+if [ -f wordpress.conf ]; then
+    sudo cp wordpress.conf /etc/apache2/sites-available/
+else
+    echo "wordpress.conf not found!"
+    exit 1
+fi
 
 sudo a2ensite wordpress
 
@@ -39,12 +46,12 @@ sudo a2dissite 000-default
 
 sudo service apache2 reload
 
-#Setting up database for wordpress
+# Setting up database for wordpress
 
 sudo mysql -u root <<EOF
 
-CREATE DATABASE wordpress;
-CREATE USER wordpress@localhost IDENTIFIED BY 'hasherbro';
+CREATE DATABASE IF NOT EXISTS wordpress;
+CREATE USER IF NOT EXISTS wordpress@localhost IDENTIFIED BY 'hasherbro';
 GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER
 ON wordpress.*
 TO wordpress@localhost;
@@ -87,7 +94,7 @@ sudo -u www-data sed -i '/SECURE_AUTH_SALT/d' "$FILE"
 sudo -u www-data sed -i '/LOGGED_IN_SALT/d' "$FILE"
 sudo -u www-data sed -i '/NONCE_SALT/d' "$FILE"
 
-#Add new keys to the file
+# Add new keys to the file
 cat <<EOF | sudo -u www-data tee -a "$FILE"
 define( 'AUTH_KEY',         '$NEW_AUTH_KEY');
 define( 'SECURE_AUTH_KEY',  '$NEW_SECURE_AUTH_KEY');
