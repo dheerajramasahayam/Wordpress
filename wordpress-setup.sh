@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# Install the basic updates
-sudo apt update
+# Install the basic updates and upgrades
+sudo apt update -y || { echo "Failed to update packages"; exit 1; }
+sudo apt upgrade -y || { echo "Failed to upgrade packages"; exit 1; }
 
 # Install the necessary dependencies
-sudo apt install apache2 \
+sudo apt install -y apache2 \
                  ghostscript \
                  libapache2-mod-php \
                  mysql-server \
@@ -17,7 +18,7 @@ sudo apt install apache2 \
                  php-mbstring \
                  php-mysql \
                  php-xml \
-                 php-zip
+                 php-zip || { echo "Failed to install dependencies"; exit 1; }
 
 
 # Let's start setting up wordpress
