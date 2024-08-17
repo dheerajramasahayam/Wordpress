@@ -28,7 +28,7 @@ sudo chown www-data: /srv/www
 
 curl https://wordpress.org/latest.tar.gz | sudo -u www-data tar zx -C /srv/www
 
-cp wordpress.conf /etc/apache2/sites-available/
+sudo cp wordpress.conf /etc/apache2/sites-available/
 
 sudo a2ensite wordpress
 
