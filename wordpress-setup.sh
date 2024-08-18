@@ -21,7 +21,7 @@ sudo apt install -y apache2 \
                  php-zip || { echo "Failed to install dependencies"; exit 1; }
 
 # Prompt the user for the MySQL root password
-read -sp "Enter the MySQL root password: " MYSQL_ROOT_PASSWORD
+read -sp "Enter the root password: " MYSQL_ROOT_PASSWORD
 echo
 
 # Prompt the user for the WordPress database user password
@@ -58,7 +58,7 @@ sudo service apache2 reload
 sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD"<<EOF
 
 CREATE DATABASE IF NOT EXISTS wordpress;
-CREATE USER IF NOT EXISTS wordpress@localhost IDENTIFIED BY 'hasherbro';
+CREATE USER IF NOT EXISTS wordpress@localhost IDENTIFIED BY '$WP_DB_PASSWORD';
 GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER
 ON wordpress.*
 TO wordpress@localhost;
